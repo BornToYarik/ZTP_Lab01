@@ -1,6 +1,59 @@
-@ZTP_Lab01_HostAddress = http://localhost:5026
+@baseUrl = http://localhost:5026
 
-GET {{ZTP_Lab01_HostAddress}}/weatherforecast/
-Accept: application/json
+### 1. creating normal product (electrics = 1,  price from 50 to 50000) -> must be 201 Created
+POST {{baseUrl}}/api/v1/products
+Content-Type: application/json
 
-###
+{
+  "name": "LaptopDell15",
+  "category": 1,
+  "price": 3500,
+  "stockQuantity": 10
+}
+
+### 2. cheking validation (short name + price > 500) -> must return 400 Bad Request with Name and Price
+POST {{baseUrl}}/api/v1/products
+Content-Type: application/json
+
+{
+  "name": "A!",
+  "category": 2,
+  "price": 999,
+  "stockQuantity": 5
+}
+
+### 3. creating forbidden word "Fake" 
+POST {{baseUrl}}/api/v1/forbidden-phrases
+Content-Type: application/json
+
+{
+  "phrase": "Fake"
+}
+
+### 4. trying to create forbidden word "Fake" -> must return 400 Bad Request
+POST {{baseUrl}}/api/v1/products
+Content-Type: application/json
+
+{
+  "name": "FakePhone12",
+  "category": 1,
+  "price": 500,
+  "stockQuantity": 2
+}
+
+### 5. updating product (changing price from 3500 to 3200 and quantity from 10 to 8)
+PUT {{baseUrl}}/api/v1/products/1
+Content-Type: application/json
+
+{
+  "name": "LaptopDell15",
+  "category": 1,
+  "price": 3200,
+  "stockQuantity": 8
+}
+
+### 6. cheking details of product ID=1 (inside "history" are changes in Price and StockQuantity!)
+GET {{baseUrl}}/api/v1/products/1
+
+### 7. short list (only Id, Name, Price)
+GET {{baseUrl}}/api/v1/products
